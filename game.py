@@ -9,21 +9,19 @@ class Game:
     def __init__(self):
         pygame.init()
         
-
-
         # Configurações da Janela
         self.screen = pygame.display.set_mode(resolucao)
         pygame.display.set_caption("Meu Jogo Quadrado")
         
         # Controlar a taxa de quadros (FPS)
         self.clock = pygame.time.Clock()
-        self.fps = 60
+        self.fps = 30
         self.running = True
         
         # Instancia o Player 1 do lado esquerdo
         self.player1 = Player1(0, altura // 2.1)
         # Instancia o Player 2 bem no lado da tela
-        self.player2 = Player2(largura, altura // 2.1)
+        self.player2 = Player2(largura -80, altura // 2.1)
         
         self.mapa = Mapa("assets/mapa_brawl.tmx")
 
@@ -64,9 +62,12 @@ class Game:
 
         
         # Opcional: Impede o jogador de sair das bordas da tela
-        self.player1.rect.clamp_ip(self.screen.get_rect())
-        self.player2.rect.clamp_ip(self.screen.get_rect())
+        self.player1.hitbox.clamp_ip(self.screen.get_rect())
+        self.player2.hitbox.clamp_ip(self.screen.get_rect())
 
+        # Alinha a imagem e a hitbox
+        self.player1.rect.center = self.player1.hitbox.center
+        self.player2.rect.center = self.player2.hitbox.center
         for bala in self.bullets[:]: #[:] faz a iteração com a lista de balas funcionar, sem esse comando a remoção de balas no mapa fica uma confusão
             bala.move()
             bala_ativa = True

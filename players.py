@@ -1,57 +1,142 @@
 import pygame
+import os
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class Player:
-    def __init__(self, x, y, color, controls):
-        self.rect = pygame.Rect(x, y, 24, 24)
-        self.speed = 1
-        self.color = color
+    def __init__(self, x, y, image, controls):
+        
+        def carregar_frame(nome_arquivo, prop1=30, prop2=60):
+            caminho = os.path.join(BASE_DIR, "assets/shelly", nome_arquivo)
+            img = pygame.image.load(caminho).convert_alpha()
+            return pygame.transform.scale(img, (prop1, prop2))
+        
+        self.walkleft = [carregar_frame('L1.png'), carregar_frame('L2.png')]
+        self.walkright = [carregar_frame('R1.png'), carregar_frame('R2.png')]
+        self.walkup = [carregar_frame('U1.png'), carregar_frame('U2.png')]
+        self.walkdown = [carregar_frame('B1.png'), carregar_frame('B2.png')]
+        self.standing = carregar_frame('shelly.png', 65, 60)
+
+        self.rect = self.standing.get_rect()
+        self.rect.topleft = (x, y)
+        self.hitbox = self.rect.inflate(-53, -20)
+
+        self.speed = 3
         self.controls = controls
         self.hidden = False
 
+        self.left = False
+        self.right = False
+        self.up = False
+        self.down = False
+        self.walkcount = 0
+
+
+
     def move(self, mapa):
-        old_x = self.rect.x
-        old_y = self.rect.y
+
+        old_x = self.hitbox.x
+        old_y = self.hitbox.y
 
         keys = pygame.key.get_pressed()
 
-        # movimento direto 
+        # Movimentação horizontal 
         if keys[self.controls["left"]]:
-            self.rect.x -= self.speed
-        if keys[self.controls["right"]]:
-            self.rect.x += self.speed
+            self.hitbox.x -= self.speed
+            self.left = True
+            self.right = False
+        elif keys[self.controls["right"]]:
+            self.hitbox.x += self.speed
+            self.right = True
+            self.left = False
+        else:
+            self.left = False
+            self.right = False
+
+        colisao_x = False
+        for wall in mapa.walls: # testa colisão com paredes
+            if self.hitbox.colliderect(wall):
+                colisao_x = True
+                break
+        for water in mapa.waters: # testa colisão
+            if self.hitbox.colliderect(water):
+                colisao_x = True
+                break
+
+        if colisao_x:
+            self.hitbox.x = old_x
+
+        # Movimentação Vertical
         if keys[self.controls["up"]]:
-            self.rect.y -= self.speed
-        if keys[self.controls["down"]]:
-            self.rect.y += self.speed
+            self.hitbox.y -= self.speed
+            self.up = True
+            self.down = False
+        elif keys[self.controls["down"]]:
+            self.hitbox.y += self.speed
+            self.down = True
+            self.up = False
+        else:
+            self.up, self.down = False, False
 
-        # colisão com parede
+        colisao_y = False
         for wall in mapa.walls:
-            if self.rect.colliderect(wall):
-                self.rect.x = old_x
-                self.rect.y = old_y
-
-        # colisão com água
+            if self.hitbox.colliderect(wall):
+                colisao_y = True
+                break
         for water in mapa.waters:
-            if self.rect.colliderect(water):
-                self.rect.x = old_x
-                self.rect.y = old_y
+            if self.hitbox.colliderect(water):
+                colisao_y = True
+                break
+
+        if colisao_y:
+            self.hitbox.y = old_y
 
         # arbusto (esconder)
         self.hidden = False
+        area_player = self.hitbox.width * self.hitbox.height
+
         for bush in mapa.bushes:
-            if self.rect.colliderect(bush):
-                self.hidden = True
+            if self.hitbox.colliderect(bush):
+                intersecao = self.hitbox.clip(bush)
+                area_no_arbusto = intersecao.width * intersecao.height
+
+                if area_no_arbusto >= (area_player/2):
+                    self.hidden = True
+                    break
+
+        self.rect.center = self.hitbox.center
 
     def draw(self, surface):
-        if not self.hidden:
-            pygame.draw.rect(surface, self.color, self.rect)
 
+        if self.walkcount + 1 > 30:
+            self.walkcount = 0
+
+        if self.hidden:
+            return
+
+        if self.left:
+            sprite_atual = self.walkleft[self.walkcount // 15]
+            self.walkcount += 1
+        elif self.right:
+            sprite_atual = self.walkright[self.walkcount // 15]
+            self.walkcount += 1
+        elif self.up:
+            sprite_atual = self.walkup[self.walkcount // 15]
+            self.walkcount += 1
+        elif self.down:
+            sprite_atual = self.walkdown[self.walkcount // 15]
+            self.walkcount += 1
+        else:
+            sprite_atual = self.standing
+            self.walkcount = 0
+
+        posicao_alinhada = sprite_atual.get_rect(midbottom=self.rect.midbottom)
+        surface.blit(sprite_atual, posicao_alinhada)
 
 class Player1(Player):
     def __init__(self, x, y):     # cor              # controles
-        super().__init__(x, y, (0, 0, 255), {"left": pygame.K_a, "right": pygame.K_d, "up": pygame.K_w, "down": pygame.K_s})
+        super().__init__(x, y, 'shelly.png', {"left": pygame.K_a, "right": pygame.K_d, "up": pygame.K_w, "down": pygame.K_s})
 
 class Player2(Player):
     def __init__(self, x, y):     # cor              # controles
-        super().__init__(x, y, (255, 0, 0), { "left": pygame.K_LEFT, "right": pygame.K_RIGHT, "up": pygame.K_UP, "down": pygame.K_DOWN})
+        super().__init__(x, y, 'shelly.png',{ "left": pygame.K_LEFT, "right": pygame.K_RIGHT, "up": pygame.K_UP, "down": pygame.K_DOWN})
