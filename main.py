@@ -1,32 +1,21 @@
 import pygame
-from game import *
+from game import Game
 from settings import resolucao
-
+from telainicial import mostrar_tela_inicial
 
 def main():
     pygame.init()
 
-    tela = pygame.display.set_mode(resolucao)
-
+    tela = pygame.display.set_mode(resolucao, pygame.FULLSCREEN | pygame.SCALED)
     pygame.display.set_caption("xama no brawl")
 
-    running = True
+    iniciar = mostrar_tela_inicial(tela)
 
-    meu_jogo = Game()
-    
-    meu_jogo.run()
+    if iniciar:
+        meu_jogo = Game(tela)
+        meu_jogo.run()
 
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-        
-        tela.fill((0,0,0))
-
-        pygame.display.flip()
-
-    pygame.QUIT()
+    pygame.quit()
 
 if __name__ == "__main__":
     main()
-  

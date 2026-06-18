@@ -7,11 +7,9 @@ from settings import resolucao, largura, altura
 from mapa import Mapa
 
 class Game:
-    def __init__(self):
-        pygame.init()
-        
-        self.screen = pygame.display.set_mode(resolucao)
-        pygame.display.set_caption("Meu Jogo Quadrado")
+    def __init__(self, tela):
+
+        self.screen = tela
 
         self.clock = pygame.time.Clock()
         self.fps = 30
@@ -76,6 +74,8 @@ class Game:
                 self.running = False
 
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.running = False
                 # Caso o jogo completo tenha acabado (Melhor de 3)
                 if self.game_over:
                     if event.key == pygame.K_r:
