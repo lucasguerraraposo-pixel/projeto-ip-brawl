@@ -31,7 +31,10 @@ class Player:
         self.down = False
         self.walkcount = 0
 
-
+        self.spawn_x = x
+        self.spawn_y = y
+        self.vida_max = 5
+        self.vida = self.vida_max
 
     def move(self, mapa):
 
@@ -57,11 +60,10 @@ class Player:
         for wall in mapa.walls: # testa colisão com paredes
             if self.hitbox.colliderect(wall):
                 colisao_x = True
-                break
+               
         for water in mapa.waters: # testa colisão
             if self.hitbox.colliderect(water):
                 colisao_x = True
-                break
 
         if colisao_x:
             self.hitbox.x = old_x
@@ -82,11 +84,11 @@ class Player:
         for wall in mapa.walls:
             if self.hitbox.colliderect(wall):
                 colisao_y = True
-                break
+                
         for water in mapa.waters:
             if self.hitbox.colliderect(water):
                 colisao_y = True
-                break
+                
 
         if colisao_y:
             self.hitbox.y = old_y
@@ -102,7 +104,7 @@ class Player:
 
                 if area_no_arbusto >= (area_player/2):
                     self.hidden = True
-                    break
+                   
 
         self.rect.center = self.hitbox.center
 
@@ -133,10 +135,38 @@ class Player:
         posicao_alinhada = sprite_atual.get_rect(midbottom=self.rect.midbottom)
         surface.blit(sprite_atual, posicao_alinhada)
 
+    def draw_hud(self, surface, label_x, label_y):
+        font = pygame.font.SysFont(None, 20)
+        label = font.render(f"P{self.player_num}", True, self.color)
+        surface.blit(label, (label_x, label_y))
+ 
+        heart_size = 12
+        gap = 4
+        for i in range(self.vida_max):
+            x = label_x + 28 + i * (heart_size + gap)
+            if i < self.vida:
+                pygame.draw.rect(surface, self.color, (x, label_y, heart_size, heart_size))
+            else:
+                pygame.draw.rect(surface, (80, 80, 80), (x, label_y, heart_size, heart_size))
+
+    def damage(self):
+        self.vida -= 1
+        if self.vida <= 0:
+            return True  # se a vida acabar retorna true
+        return False
+
+    def respawn(self):
+        self.vida = self.vida_max
+        self.rect.topleft = (self.spawn_x, self.spawn_y)
+        self.hitbox = self.rect.inflate(-53, -20)
+
 class Player1(Player):
     def __init__(self, x, y):     # cor              # controles
         super().__init__(x, y, 'shelly.png', {"left": pygame.K_a, "right": pygame.K_d, "up": pygame.K_w, "down": pygame.K_s})
-
+        self.color = (0, 0, 255)
+        self.player_num = 1
 class Player2(Player):
     def __init__(self, x, y):     # cor              # controles
         super().__init__(x, y, 'shelly.png',{ "left": pygame.K_LEFT, "right": pygame.K_RIGHT, "up": pygame.K_UP, "down": pygame.K_DOWN})
+        self.color = (255, 0, 0)
+        self.player_num = 2
