@@ -1,23 +1,3 @@
-ESTRUTURA BÁSICA
-
-INSTANCIAMENTO
-main.py
-|
-|__ game.py
-      |
-      |__ players.py
-      |      |
-      |      |__ projeteis.py
-      |
-      |
-      |__
-      |
-      |__
-      |
-      |__
-      |
-      |__
-
 Passos necessários para rodar o jogo(windows):
 1- Ter criado o ambiente virtual(venv) em seu vscode:
       python -m venv venv

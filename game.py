@@ -1,9 +1,10 @@
 import pygame
 import sys
 import random
+import math
 from players import Player1, Player2
 from itens import Item, Projectile 
-from settings import resolucao, largura, altura
+from settings import largura, altura
 from mapa import Mapa
 
 class Game:
@@ -111,6 +112,10 @@ class Game:
                             color=(0, 150, 255),
                             damage=1 + self.player1.damage_boost
                         )
+                        nova_bala.start_x = self.player1.rect.centerx
+                        nova_bala.start_y = self.player1.rect.centery
+                        nova_bala.max_range = 220    #define o alcance/range das balas 
+
                         self.bullets.append(nova_bala)
                         self.balas_p1 -= 1
                         if self.balas_p1 == 0:
@@ -125,12 +130,20 @@ class Game:
                             color=(255, 50, 50),
                             damage=1 + self.player2.damage_boost
                         )
+                        nova_bala.start_x = self.player2.rect.centerx
+                        nova_bala.start_y = self.player2.rect.centery
+                        nova_bala.max_range = 220    
+
                         self.bullets.append(nova_bala)
                         self.balas_p2 -= 1
                         if self.balas_p2 == 0:
                             self.recarga_p2 = pygame.time.get_ticks() # Tempo para iniciar a recarga do Player 2
 
     def checar_bala(self, bala):
+        dist_percorrida = math.hypot(bala.x - bala.start_x, bala.y - bala.start_y)
+        if dist_percorrida > bala.max_range:
+            return True
+
         if bala.x < 0 or bala.x > largura or bala.y < 0 or bala.y > altura:
             return True
 
@@ -138,7 +151,7 @@ class Game:
             return True
 
         # Bala vermelha acertou o Player 1
-        if bala.color == (255, 50, 50) and bala.rect.colliderect(self.player1.rect):
+        if bala.color == (255, 50, 50) and bala.rect.colliderect(self.player1.hitbox):
             morreu = self.player1.damage(bala.damage) 
             if morreu:
                 self.p2_score += 1 
@@ -151,7 +164,7 @@ class Game:
             return True
 
         # Bala azul acertou o Player 2
-        if bala.color == (0, 150, 255) and bala.rect.colliderect(self.player2.rect):
+        if bala.color == (0, 150, 255) and bala.rect.colliderect(self.player2.hitbox):
             morreu = self.player2.damage(bala.damage) 
             if morreu:
                 self.p1_score += 1 
