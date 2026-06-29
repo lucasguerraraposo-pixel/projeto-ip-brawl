@@ -22,7 +22,7 @@ class Player:
 
         self.rect = self.standing.get_rect()
         self.rect.topleft = (x, y)
-        self.hitbox = self.rect.inflate(-53, -20)
+        self.hitbox = self.rect.inflate(-53, -30)
 
         self.speed_base = 2
         self.speed_boost = 0  
@@ -132,7 +132,6 @@ class Player:
             sprite_atual = self.standing
             self.walkcount = 0
 
-        
         posicao_alinhada = sprite_atual.get_rect(midbottom=self.rect.midbottom)
         surface.blit(sprite_atual, posicao_alinhada)
 
