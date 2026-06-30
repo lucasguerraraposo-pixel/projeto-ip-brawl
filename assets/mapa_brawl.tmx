@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="33" height="21" tilewidth="24" tileheight="24" infinite="0" nextlayerid="10" nextobjectid="103">
+<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="33" height="21" tilewidth="24" tileheight="24" infinite="0" nextlayerid="10" nextobjectid="123">
  <editorsettings>
   <export target="../../../Downloads/mapa_brawl.tmx" format="tmx"/>
  </editorsettings>
@@ -31,7 +31,7 @@
  <imagelayer id="2" name="mapa">
   <image source="Map (10).png" width="791" height="500"/>
  </imagelayer>
- <objectgroup id="6" name="ground">
+ <objectgroup id="6" name="ground" visible="0">
   <object id="60" x="0" y="0" width="790.667" height="497.333"/>
  </objectgroup>
  <objectgroup id="7" name="water" visible="0">
@@ -71,5 +71,11 @@
   <object id="98" x="167" y="154.5" width="23.5" height="152.5"/>
   <object id="99" x="143.5" y="154" width="38.5" height="85"/>
   <object id="100" x="192.5" y="477.5" width="22" height="23"/>
+  <object id="111" x="-58.6667" y="-46.6667" width="54.6667" height="570.667"/>
+  <object id="114" x="796" y="-66.6667" width="57.3333" height="636"/>
+  <object id="119" x="924" y="110.667"/>
+  <object id="120" x="-36" y="505.333" width="897.333" height="81.3333"/>
+  <object id="121" x="-54.6667" y="-64" width="925.333" height="58.6667"/>
+  <object id="122" x="966.667" y="241.333"/>
  </objectgroup>
 </map>

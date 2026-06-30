@@ -121,7 +121,7 @@ class Game:
                         )
                         nova_bala.start_x = self.player1.rect.centerx
                         nova_bala.start_y = self.player1.rect.centery
-                        nova_bala.max_range = 220    #define o alcance/range das balas 
+                        nova_bala.max_range = 315    #define o alcance/range das balas 
 
                         self.bullets.append(nova_bala)
                         self.balas_p1 -= 1
@@ -139,7 +139,7 @@ class Game:
                         )
                         nova_bala.start_x = self.player2.rect.centerx
                         nova_bala.start_y = self.player2.rect.centery
-                        nova_bala.max_range = 220    
+                        nova_bala.max_range = 315
 
                         self.bullets.append(nova_bala)
                         self.balas_p2 -= 1
