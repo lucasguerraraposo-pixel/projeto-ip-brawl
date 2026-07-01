@@ -4,9 +4,10 @@ import random
 import math
 from players import Player1, Player2
 from itens import Item, Projectile
-from settings import largura, altura
+from settings import largura, altura, resolucao
 from mapa import Mapa
 from personagens import Personagens
+from tela_selecao import escolher_personagens
 
 
 class Game:
@@ -92,6 +93,22 @@ class Game:
                         self.winner_text = ""
                         self.reset_rodada()
 
+                    if event.key == pygame.K_t:
+                        self.p1_score = 0
+                        self.p2_score = 0
+                        self.game_over = False
+                        self.winner_text = ""
+                        tela = pygame.display.set_mode(resolucao, pygame.FULLSCREEN | pygame.SCALED)
+
+                        p1_personagem, p2_personagem = escolher_personagens(tela)
+                        
+                        if p1_personagem is None or p2_personagem is None:
+                            pygame.quit()
+                            return
+
+                        meu_jogo = Game(tela, p1_personagem, p2_personagem)
+                        meu_jogo.run()
+                
                 elif self.round_over:
                     if event.key == pygame.K_SPACE:
                         self.round_over = False
@@ -336,10 +353,13 @@ class Game:
             font_restart = pygame.font.SysFont(None, 22)
 
             label_restart = font_restart.render("Pressione 'R' para reiniciar o campeonato", True, (255, 255, 255))
+            label_selection = font_restart.render("Pressione 'T' para selecionar outros personagens", True, (255, 255, 255))
 
             pos_x_res = (largura - label_restart.get_width()) // 2
+            pos_x_select = (largura - label_restart.get_width()) // 2
 
             self.screen.blit(label_restart, (pos_x_res, pos_y_vit + 50))
+            self.screen.blit(label_selection, (pos_x_res, pos_y_vit + 75))
 
         pygame.display.flip()
 
