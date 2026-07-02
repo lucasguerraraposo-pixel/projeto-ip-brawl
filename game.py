@@ -327,7 +327,7 @@ class Game:
 
             font_continua = pygame.font.SysFont(None, 22)
 
-            label_continua = font_continua.render("Pressione ESPAÇO para o próximo round", True, (255, 255, 255))
+            label_continua = font_continua.render("Pressione [ESPACO] para iniciar a proxima rodada", True, (255, 255, 255))
 
             pos_x_cont = (largura - label_continua.get_width()) // 2
 
@@ -352,8 +352,8 @@ class Game:
 
             font_restart = pygame.font.SysFont(None, 22)
 
-            label_restart = font_restart.render("Pressione 'R' para reiniciar o campeonato", True, (255, 255, 255))
-            label_selection = font_restart.render("Pressione 'T' para selecionar outros personagens", True, (255, 255, 255))
+            label_restart = font_restart.render("Pressione [R] para jogar novamente", True, (255, 255, 255))
+            label_selection = font_restart.render("Pressione [T] para voltar a selecao de personagens", True, (255, 255, 255))
 
             pos_x_res = (largura - label_restart.get_width()) // 2
             pos_x_select = (largura - label_restart.get_width()) // 2
