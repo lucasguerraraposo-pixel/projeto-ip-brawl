@@ -10,11 +10,3 @@ Passos necessários para rodar o jogo(windows):
 
 3- Instalar o Pygame e o PyTMX:
       pip install pygame pytmx
-
-FALTA:
-URGENTE: consertar a velocidade da diagonal que está mais rápida
-mudar o placar
-mudar o hud -> melhorar vida, mudar o texto do bonus de speed e dano para o icone com a contagem
-mudar a tela de vitoria de rodada e do jogo
-(minha opinião) personagens terem mais vida para alongar a batalha
-mudar a seleção
